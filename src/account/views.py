@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib import messages
 
+
 def view_login(request):
     if request.method == "GET":
         return render(request, 'login.html')
@@ -19,6 +20,7 @@ def view_login(request):
         login(request, user)
         messages.success(request, f"Logged in Successfully")
         return redirect("/rooms")
+
 
 def view_signup(request):
     if request.method == "GET":
@@ -38,6 +40,7 @@ def view_signup(request):
         messages.success(request, f"Signed up Successfully")
 
     return redirect("/rooms")
+
 
 def view_logout(request):
     logout(request)
