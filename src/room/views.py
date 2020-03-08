@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Room, Message, UserJoined
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def view_rooms(request):
     if request.method == 'GET':
         rooms = Room.objects.all()
@@ -13,6 +15,7 @@ def view_rooms(request):
         room = Room.objects.create(room_name=request.POST['room_name'])
         return redirect('/rooms/')
 
+@login_required
 def message_room(request, id):
     room = Room.objects.get(id=id)
     messages = Message.objects.filter(room=room)
@@ -25,13 +28,11 @@ def message_room(request, id):
     userStatus.save()
 
     online_users = UserJoined.objects.filter(room=room, status='ONLINE')
-    offline_users = UserJoined.objects.filter(room=room, status='OFFLINE')
 
     context_variables = {
         'chat_messages': messages,
         'room': room,
-        'online_users': online_users,
-        'offline_users': offline_users
+        'online_users': online_users
     }
 
     return render(request, 'message_room.html', context_variables)

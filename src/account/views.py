@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib import messages
 
 
 def view_login(request):
     if request.method == "GET":
+        if request.user.is_authenticated:
+            return redirect("/rooms")
         return render(request, 'login.html')
 
     if request.method == "POST":
@@ -41,7 +44,7 @@ def view_signup(request):
 
     return redirect("/rooms")
 
-
+@login_required
 def view_logout(request):
     logout(request)
     messages.success(request, f"Logged out Successfully")
